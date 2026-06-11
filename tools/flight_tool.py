@@ -5,7 +5,7 @@ load_dotenv()
 
 API_KEY=os.getenv("AVIATIONSTACK_API_KEY")
 
-def seach_flights(query):
+def search_flights(query):
     url = "http://api.aviationstack.com/v1/flight"
     params = {
         "access_key": API_KEY,

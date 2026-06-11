@@ -4,7 +4,7 @@ import operator
 import psycopg
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.postgres import PostgresSaver
-from langchain_core.message import (AnyMessage, HumanMessage, AIMessage, SystemMessage)
+from langchain_core.messages import (AnyMessage, HumanMessage, AIMessage, SystemMessage)
 
 from langchain_groq import ChatGroq
 from tools.tavily_tool import tavily_search
@@ -24,7 +24,7 @@ class TravelState(TypedDict):
     user_query: str
     flight_results: str
     hotel_results: str
-    itinerrary: str
+    itinerary: str
     llm_calls: int
 
 def flight_agent(state: TravelState):
@@ -79,7 +79,7 @@ def final_agent(state: TravelState):
     Generate final response.
     Flight Results: {state["flight_results"]}
     Hotel Results: {state['hotel_results']}
-Itinerary: {state["itinerrary"]}
+Itinerary: {state["itinerary"]}
 """
     response = llm.invoke([HumanMessage(content=final_prompt)])
     
@@ -102,7 +102,8 @@ graph.add_edge("itinerary_agent", "final_agent")
 graph.add_edge("final_agent", END)
 
 
-_conn = psycopg.connent(DATABASE_URL)
+_conn = psycopg.connect(DATABASE_URL)
+_conn.autocommit = True
 checkpointer = PostgresSaver(_conn)
 checkpointer.setup()
 
@@ -117,14 +118,14 @@ if __name__ =="__main__":
 
     user_input = input("Enter travel request: ")
     result = app.invoke({
-        "message": [HumanMessage(content=user_input)],
+        "messages": [HumanMessage(content=user_input)],
         "user_query": user_input,
         "flight_results": "",
         "hotel_result":"",
         "itinerary":"",
         "llm_calls":0
-    })
-    print("n\ FINAL RESPONSE: \n")
+    }, config=config)
+    print("\n FINAL RESPONSE: \n")
 
     for msg in result["message"]:
         print(msg.content)

@@ -100,13 +100,10 @@ for chat in st.session_state.chat_history:
             f'<div class="chat-ai">🤖 {chat["content"]}</div>',
             unsafe_allow_html=True
         )
-
 user_input = st.chat_input(
     "Example: Plan a 5 day trip from Mumbai to Dubai in July"
 )
-
 if user_input:
-
     st.session_state.chat_history.append(
         {
             "role": "user",
@@ -121,18 +118,16 @@ if user_input:
     }
 
     with st.spinner("🔍 Searching flights..."):
-        result = app.invoke(
-            {
-                "message": [HumanMessage(content=user_input)],
-                "user_query": user_input,
-                "flight_results": "",
-                "hotel_results": "",
-                "itinerary": "",
-                "llm_calls": 0
-            },
+        result = app.invoke({
+            "message": [HumanMessage(content=user_input)],
+            "user_query": user_input,
+            "flight_results": "",
+            "hotel_results": "",
+            "itinerary": "",
+            "llm_calls": 0
+        },
             config=config
         )
-
     response = ""
 
     if "message" in result:
@@ -150,13 +145,10 @@ if user_input:
             "content": response
         }
     )
-
     st.rerun()
-
 # Sidebar
 with st.sidebar:
     st.title("⚙️ Settings")
-
     username = st.text_input(
         "Username",
         value="guest",

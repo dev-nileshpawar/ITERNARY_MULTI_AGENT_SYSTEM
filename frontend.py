@@ -155,6 +155,15 @@ if user_input:
 
 # Sidebar
 with st.sidebar:
+    st.title("⚙️ Settings")
+
+    username = st.text_input(
+        "Username",
+        value="guest",
+        help="Used for chat history and LangGraph thread_id"
+    )
+    st.divider()
+
     st.title("🌎 Popular Destinations")
 
     st.image(

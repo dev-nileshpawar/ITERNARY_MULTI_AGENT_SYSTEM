@@ -12,3 +12,18 @@ from tools.flight_tool import search_flight
 
 from dotenv import load_dotenv
 load_dotenv()
+
+llm = ChatGroq(
+    model ="llama-3.3-70b-versatile"
+)
+
+DATABASE_URL = os.getenv("DB_URL")
+
+class TravelState(TypedDict):
+    message: Annotated[list[AnyMessage], operator.add]
+    user_query: str
+    flight_results: str
+    hotel_results: str
+    itinerrary: str
+    llm_calls: int
+
